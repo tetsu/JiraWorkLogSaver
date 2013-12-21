@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit 
+  colors="true" 
+  stopOnFailure="false">
+  <php>
+    <server name="SERVER_NAME" value="http://example.com" />
+  </php>
+  <testsuites>
+    <testsuite name="CI Unit Testing Class Tests">
+      <file>./CI_Unit_Test.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>

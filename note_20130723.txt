@@ -1,0 +1,30 @@
+2012-10-24 21:21 2012-10-24 23:26
+https://rakuten.atlassian.net/sr/jira.issueviews:searchrequest-xml/temp/SearchRequest.xml?jqlQuery=updated%20%3E%20%222012-10-24%2021%3A21%22%20AND%20updated%20%3C%20%222012-10-24%2023%3A26%22%20ORDER%20BY%20updated%20DESC&tempMax=1000
+Received Jira XML result.
+XML was converted to an object.
+1000 of 2295 items abstracted.
+
+
+
+2012-10-24 21:47 2012-10-24 22:19
+https://rakuten.atlassian.net/sr/jira.issueviews:searchrequest-xml/temp/SearchRequest.xml?jqlQuery=updated%20%3E%20%222012-10-24%2021%3A47%22%20AND%20updated%20%3C%20%222012-10-24%2022%3A19%22%20ORDER%20BY%20updated%20DESC&tempMax=1000
+Received Jira XML result.
+XML was converted to an object.
+1000 of 1041 items abstracted.
+
+
+23,587,200
+24000000
+
+23,509,440
+
+
+php /var/www/JiraAPI3/index.php jiradb index 1000 31536000 20000000 1920 1800
+
+php /var/www/JiraAPI3/index.php jiradb index 1000 23520000 21000000 65 60
+
+php /var/www/JiraAPI3/index.php jiradb index 1000 86400 0
+
+Train internal staff in how to use the new features and how to handle customer support Prepare for hand over of maintenance to Operations Conduct security audit(info) Conduct dry-run (info) Create user manuals (info) Complete technical documentation (info) Collect lessons learned (used in the Project Review) (info)
+
+Conduct project review Monitor in production for 2-6 weeks, depending on project Return project resources, including project team  Close vendor contracts (info)

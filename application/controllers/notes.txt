@@ -1,0 +1,137 @@
+/********************************************************************
+* Site URL *
+http://ec2-54-242-115-235.compute-1.amazonaws.com:8080/
+
+* phpMyAdmin *
+http://ec2-54-242-115-235.compute-1.amazonaws.com:8080/phpMyAdmin/
+dbuser
+3m42Giqr
+
+
+Function: index($jql, $max, $format)
+Summary: Get an assigned period entry form section in HTML format
+http://localhost:8888/index.php/worklogApp/get_issues/project+%3D+%22Project+Management+Department%22+AND+assignee+%3D+chiba/10
+http://localhost:8888/index.php/issues?jql=project+%3D+%22Project+Management+Department%22+AND+assignee+%3D+chiba&max=100
+http://localhost:8888/index.php/worklogApp/get_issues/project+%3D+"Smart+Device+Technologies+Department"+AND+reporter+%3D+"cynthia.kustanto"/100
+
+* Using Jira REST Search API on local environment *
+http://localhost:8888/index.php/issues/REST
+view-source:http://localhost:8888/index.php/issues/REST/10/10/
+
+* Show Issues in Array format *
+http://localhost:8888/index.php/issues/PRINT_ARRAY
+
+Execute from command-line interface: (Tips: convert JQL to URL style [e.q. "->%22])
+php /var/www/index.php issues CLI project+%3D+%22Project+Management+Department%22+AND+assignee+%3D+chiba 2
+php /var/www/index.php issues CLI project+%3D+%22Smart+Device+Technologies+Department%22+AND+reporter+%3D+%22cynthia.kustanto%22 2
+php /var/www/index.php issues REST
+
+* CLI for local env *
+php /var/www/index.php issues REST
+
+* CLI for Crontab *
+* 12 * * 6   php /var/www/JiraAPI/index.php issues REST 
+30 * * * *   php /var/www/JiraAPI/index.php issues REST 50 1000
+* 18 * * 6   php /var/www/JiraAPI/index.php worklogApp update_worklogs 700 4
+0 * * * *   php /var/www/JiraAPI/index.php worklogApp update_worklogs
+
+Execute from browser:
+http://localhost:8888/index.php/issues_cli/project+%3D+%22Project+Management+Department%22+AND+assignee+%3D+chiba/100
+
+* How to Login to AWS via SSH *
+// ssh -i sfadc.pem ubuntu@ec2-50-16-182-71.compute-1.amazonaws.com
+ssh -i sfadc.pem ubuntu@ec2-54-242-115-235.compute-1.amazonaws.com
+
+* Apache on Ubuntu Notes *
+/etc/apache2/apache2.conf 	apache2 config file
+/etc/apache2/ports.conf 	Port numbers
+/etc/apache2/mods-available/ 	モジュールファイルが置かれるディレクトリ
+/etc/apache2/mods-enabled/ 	使用するモジュールへのリンクファイルが置かれるディレクトリ
+/etc/apache2/sites-available/ 	サイト定義ファイルが置かれるディレクトリ
+/etc/apache2/sites-enabled/ 	使用するサイト定義ファイルへのリンクファイルが置かれるディレクトリ
+/etc/init.d/apache2 restart     restart
+
+
+* Connect to MySQL *
+mysql -h sfadcstag.ckfnyacxirbi.us-east-1.rds.amazonaws.com -udbuser -p
+username:dbuser password:3m42Giqr
+port: 3306
+
+* phpMyAdmin *
+http://ec2-50-16-182-71.compute-1.amazonaws.com:8080/phpMyAdmin/
+http://jiradb.rakutensf.com:8080/phpMyAdmin/
+username:dbuser password:3m42Giqr
+
+* Jira Search REST API *
+https://rakuten.atlassian.net/rest/api/2/search?jql&startAt&maxResults&fields&expand
+https://rakuten.atlassian.net/rest/api/2/search?jql=&startAt=0&maxResults=10
+
+
+* Local MySQL *
+root:3m42Giqr
+port: 3306
+
+* How To Import SQL Files *
+mysql > CREATE DATABASE jira_api;
+mysql > USE jira_api;
+mysql > SOURCE jira_api_2013-01-28.sql;
+
+* Check database content *
+mysql > SELECT * FROM ISSUES
+
+scp -i sfadc.pem sfadc.pem ubuntu@ec2-50-16-182-71.compute-1.amazonaws.com:/mnt
+scp sfadc.pem ubuntu@ec2-50-16-182-71.compute-1.amazonaws.com:/mnt
+scp -i sfadc.pem foobar.txt ubuntu@ec2-50-16-182-71.compute-1.amazonaws.com:/some/remote/directory
+
+* Upload directory files to Web Server *
+Tip: You can upload only to /tmp folder. Move files after logging into EC2 using SSH
+scp -r -i sfadc.pem /Users/tetsuromori/Desktop/Dropbox/JiraAPI ubuntu@ec2-50-16-182-71.compute-1.amazonaws.com:/tmp
+
+*get files from remote*
+scp -r -i sfadc.pem ubuntu@ec2-50-16-182-71.compute-1.amazonaws.com:/var/www/JiraAPI2 /Users/tetsuromori/Desktop/
+
+* How To Create a table with multiple primal keys *
+CREATE TABLE LABELS(
+issue_key varchar(255),
+label_value varchar(255),
+PRIMARY KEY(issue_key, label_value))
+
+CREATE TABLE ISSUE_FIXVERSION(
+issue_key varchar(255),
+fix_version_name varchar(255),
+data_updated timestamp,
+PRIMARY KEY(issue_key, fix_version_name))
+
+* Worklog API *
+http://localhost:8888/index.php/worklogApp/update_worklogs
+
+
+*get worklog of a user for a specific day with detail user data*
+SELECT * FROM WORKLOGS RIGHT JOIN USERS 
+ON WORKLOGS.username = USERS.username 
+WHERE WORKLOGS.username = 'cynthia.kustanto' 
+AND WORKLOGS.work_date = '2012-09-18 00:00:00'
+
+*get worklog of a user for a specific period with detail issue data*
+SELECT * FROM WORKLOGS RIGHT JOIN ISSUES 
+ON WORKLOGS.issue_id = ISSUES.issue_id 
+WHERE WORKLOGS.username = 'cynthia.kustanto' 
+AND WORKLOGS.work_date>=cast('2012-09-18 00:00:00' as datetime)
+AND WORKLOGS.work_date<=cast('2012-09-28 00:00:00' as datetime);
+
+*get total work hours of a project for a specific period*
+SELECT SUM( hours ) 
+FROM WORKLOGS
+WHERE project_key = 'RMX'
+AND work_date >= CAST('2013-02-04 00:00:00' AS DATETIME) 
+AND work_date >= CAST('2013-02-06 00:00:00' AS DATETIME);
+
+https://rakuten.atlassian.net/rest/api/2/customFieldOption/customfield_11701
+
+Get Jira Issue data for GI
+php /var/www/JiraAPI3/index.php jiradb index 1000 0 1 project%20%3D%20%22Global%20Ichiba%22
+
+Get Jira Issue data for Non-GI
+php /var/www/JiraAPI3/index.php jiradb index 1000 0 1 project%20%21%3d%20%22Global%20Ichiba%22
+
+********************************************************************/
